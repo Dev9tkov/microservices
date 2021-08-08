@@ -5,7 +5,6 @@ import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.repository.UserReposito
 import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.shared.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -27,6 +26,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);
         userEntity.setEncryptedPassword("test");
         userRepository.save(userEntity);
-        return null;
+        UserDTO returnValue = modelMapper.map(userEntity, UserDTO.class);
+        return returnValue;
     }
 }

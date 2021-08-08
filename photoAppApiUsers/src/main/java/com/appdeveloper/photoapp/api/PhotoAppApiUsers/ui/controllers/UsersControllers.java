@@ -1,6 +1,7 @@
 package com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.controllers;
 
 import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.model.CreateUserRequestModel;
+import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.model.CreateUserResponseModel;
 import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.service.UserService;
 import com.appdeveloper.photoapp.api.PhotoAppApiUsers.ui.shared.UserDTO;
 import org.modelmapper.ModelMapper;
@@ -28,11 +29,12 @@ public class UsersControllers {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
+    public ResponseEntity<CreateUserResponseModel> createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDTO userDTO = modelMapper.map(userDetails, UserDTO.class);
-        userService.createUser(userDTO);
-        return new ResponseEntity(HttpStatus.CREATED);
+        UserDTO created = userService.createUser(userDTO);
+        CreateUserResponseModel returnValue = modelMapper.map(created, CreateUserResponseModel.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
     }
 }
